@@ -6,85 +6,319 @@
 <title>閱大安・財務月報總覽</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+
   :root {
-    --ink:#1a1814;--ink2:#3d3a34;--ink3:#7a7670;
-    --paper:#f8f5f0;--paper2:#ede9e2;
-    --gold:#b8860b;--gold2:#d4a017;
-    --border:rgba(26,24,20,0.12);
-    --green:#1a6b3c;--blue:#1a4a6b;--radius:6px;
+    /* VI 暖灰色系 */
+    --wg1:  #EAE7E1;
+    --wg9:  #898480;
+    --wg11: #696460;
+    --wg41: #3C3835;
+    --white: #F7F5F2;
+    --line:  rgba(60,56,53,0.12);
+    /* 保留舊別名相容 */
+    --ink:   #3C3835;
+    --ink2:  #696460;
+    --ink3:  #898480;
+    --paper: #EAE7E1;
+    --paper2:#F0EDE8;
+    --gold:  #898480;
+    --gold2: #696460;
+    --border:rgba(60,56,53,0.12);
+    --green: #1F5C38;
+    --blue:  #2B4A6B;
+    --radius:2px;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.7;}
-  .header{background:var(--ink);color:#f8f5f0;padding:36px 32px 28px;border-bottom:3px solid var(--gold);position:relative;overflow:hidden;}
-  .header::before{content:'';position:absolute;top:0;right:0;bottom:0;width:200px;background:repeating-linear-gradient(45deg,transparent,transparent 6px,rgba(184,134,11,0.07) 6px,rgba(184,134,11,0.07) 7px);}
-  .header h1{font-size:22px;font-weight:700;letter-spacing:0.06em;margin-bottom:4px;}
-  .header p{font-size:12px;color:rgba(248,245,240,0.45);letter-spacing:0.1em;}
-  .header-badge{display:inline-block;margin-top:12px;background:rgba(184,134,11,0.2);border:1px solid rgba(184,134,11,0.4);color:var(--gold2);font-size:11px;padding:3px 10px;border-radius:10px;letter-spacing:0.06em;}
-  .main{max-width:680px;margin:0 auto;padding:32px 20px 60px;}
-  .notice{background:rgba(184,134,11,0.07);border:1px solid rgba(184,134,11,0.22);border-radius:var(--radius);padding:12px 16px;font-size:12.5px;color:var(--ink2);margin-bottom:28px;line-height:1.8;}
-  .year-label{font-size:11px;font-weight:700;letter-spacing:0.2em;color:var(--gold);margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
-  .year-label::after{content:'';flex:1;height:1px;background:var(--border);}
-  .report-list{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
-  .report-card{display:flex;align-items:center;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;text-decoration:none;color:var(--ink);transition:all 0.18s;position:relative;overflow:hidden;}
-  .report-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--border);transition:background 0.18s;}
-  .report-card:hover{border-color:rgba(184,134,11,0.4);background:rgba(184,134,11,0.03);transform:translateX(2px);}
-  .report-card:hover::before{background:var(--gold);}
-  .report-card.latest::before{background:var(--gold);}
-  .report-card.latest{border-color:rgba(184,134,11,0.3);}
-  .card-month{font-size:20px;font-weight:700;color:var(--ink);min-width:60px;letter-spacing:-0.01em;}
-  .card-meta{flex:1;padding:0 14px;}
-  .card-title{font-size:13.5px;font-weight:500;color:var(--ink2);margin-bottom:2px;}
-  .card-period{font-size:11px;color:var(--ink3);}
-  .card-badges{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
-  .badge{font-size:10px;padding:2px 8px;border-radius:10px;white-space:nowrap;}
-  .badge-new{background:rgba(26,107,60,0.12);color:var(--green);border:1px solid rgba(26,107,60,0.2);}
-  .badge-gold{background:rgba(184,134,11,0.1);color:var(--gold);border:1px solid rgba(184,134,11,0.2);}
-  .card-arrow{font-size:16px;color:var(--ink3);margin-left:8px;transition:transform 0.18s,color 0.18s;}
-  .report-card:hover .card-arrow{transform:translateX(4px);color:var(--gold);}
-  .footer{text-align:center;font-size:11px;color:var(--ink3);padding-top:20px;border-top:1px solid var(--border);line-height:1.9;}
-  @media(max-width:480px){.header{padding:28px 20px 22px;}.header h1{font-size:18px;}.card-month{font-size:17px;min-width:48px;}.card-title{font-size:13px;}}
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--ink);
+    color: #f8f5f0;
+    padding: 36px 32px 28px;
+    border-bottom: 3px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(92deg, transparent, transparent 120px, rgba(234,231,225,0.03) 120px, rgba(234,231,225,0.03) 121px),
+      repeating-linear-gradient(178deg, transparent, transparent 60px, rgba(234,231,225,0.02) 60px, rgba(234,231,225,0.02) 61px);
+    pointer-events: none;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .header p {
+    font-size: 12px;
+    color: rgba(248,245,240,0.45);
+    letter-spacing: 0.1em;
+  }
+  .header-badge {
+    display: inline-block;
+    margin-top: 12px;
+    background: rgba(234,231,225,0.12);
+    border: 1px solid rgba(234,231,225,0.25);
+    color: var(--wg1);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* ── NOTICE BOX ── */
+  .notice {
+    background: rgba(105,100,96,0.06);
+    border: 1px solid rgba(105,100,96,0.18);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: var(--ink2);
+    margin-bottom: 28px;
+    line-height: 1.8;
+  }
+
+  /* ── YEAR SECTION ── */
+  .year-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--wg11);
+    margin-bottom: 12px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .year-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── REPORT LIST ── */
+  .report-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .report-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: all 0.18s;
+    position: relative;
+    overflow: hidden;
+  }
+  .report-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--border);
+    transition: background 0.18s;
+  }
+  .report-card:hover {
+    border-color: var(--wg11);
+    background: #F2F0EC;
+    transform: translateX(2px);
+  }
+  .report-card:hover::before { background: var(--wg11); }
+
+  .report-card.latest::before { background: var(--wg41); }
+  .report-card.latest { border-color: rgba(60,56,53,0.35); }
+
+  .card-month {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    min-width: 60px;
+    letter-spacing: -0.01em;
+  }
+  .card-meta {
+    flex: 1;
+    padding: 0 14px;
+  }
+  .card-title {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink2);
+    margin-bottom: 2px;
+  }
+  .card-period {
+    font-size: 11px;
+    color: var(--ink3);
+  }
+  .card-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+  .badge-new {
+    background: rgba(60,56,53,0.1);
+    color: var(--wg41);
+    border: 1px solid rgba(60,56,53,0.25);
+  }
+  .badge-gold {
+    background: rgba(105,100,96,0.1);
+    color: var(--wg11);
+    border: 1px solid rgba(105,100,96,0.3);
+  }
+  .card-arrow {
+    font-size: 16px;
+    color: var(--ink3);
+    margin-left: 8px;
+    transition: transform 0.18s, color 0.18s;
+  }
+  .report-card:hover .card-arrow {
+    transform: translateX(4px);
+    color: var(--wg11);
+  }
+
+
+  /* ── PDF LINK ── */
+  .pdf-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--wg9);
+    text-decoration: none;
+    padding: 3px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: transparent;
+    transition: all 0.18s;
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+  .pdf-link:hover {
+    color: var(--wg41);
+    border-color: var(--wg11);
+    background: var(--paper2);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--ink3);
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    line-height: 1.9;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 480px) {
+    .header { padding: 28px 20px 22px; }
+    .header h1 { font-size: 18px; }
+    .card-month { font-size: 17px; min-width: 48px; }
+    .card-title { font-size: 13px; }
+  }
 </style>
 </head>
 <body>
+
 <div class="header">
+  <div style="max-width:680px;margin:0 auto;position:relative">
+  <a href="https://culturalcity.github.io/" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;letter-spacing:0.1em;color:var(--wg9);text-decoration:none;margin-bottom:16px;transition:color .18s" onmouseover="this.style.color='#EAE7E1'" onmouseout="this.style.color='#898480'">← 返回社區主頁</a>
+  </div>
   <h1>閱大安・財務月報</h1>
-  <p>閱大安 COMMUNITY · MONTHLY FINANCIAL REPORT</p>
+  <p>YUEDA COMMUNITY · MONTHLY FINANCIAL REPORT</p>
   <div class="header-badge">住戶公告專區</div>
 </div>
+
 <div class="main">
-  <div class="notice">📋 本頁為閱大安社區每月財務報表公告。點擊各月份連結即可查閱完整報告。如有疑問請洽管委會。</div>
+
+  <div class="notice">
+    📋 本頁為閱大安社區每月財務月報公告。點擊月份卡片查閱完整分析報告；「原始財報 PDF」連結提供原始帳務憑證下載。如有疑問請洽管委會。
+  </div>
+
+  <div style="margin-bottom:24px">
+    <a href="utility.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);text-decoration:none;color:var(--wg11);font-size:12.5px;letter-spacing:.04em;transition:all .18s" onmouseover="this.style.background='#F2F0EC'" onmouseout="this.style.background='var(--white)'">
+      ⚡ 大公電・公水帳單明細 →
+    </a>
+  </div>
 
   <!-- ══ 2026 年 ══ -->
   <div class="year-label">2026 年度</div>
   <div class="report-list">
 
-    <a href="2026-02.html" class="report-card latest">
-      <div class="card-month">2月</div>
-      <div class="card-meta">
-        <div class="card-title">2026年2月財務月報</div>
-        <div class="card-period">2026-02-01 ～ 2026-02-28 ・ 發布：2026/03/19</div>
-      </div>
-      <div class="card-badges">
-        <span class="badge badge-new">最新</span>
-        <span class="badge badge-gold">含遞延付款說明</span>
-      </div>
-      <div class="card-arrow">›</div>
-    </a>
+    <!-- 新增月份時，複製下方一個 report-card 區塊，修改月份、期間、連結即可 -->
 
-    <a href="2026-01.html" class="report-card">
-      <div class="card-month">1月</div>
-      <div class="card-meta">
-        <div class="card-title">2026年1月財務月報</div>
-        <div class="card-period">2026-01-01 ～ 2026-01-31 ・ 發布：2026/02/15</div>
-      </div>
-      <div class="card-badges">
-        
-        <span class="badge badge-gold">首期報告</span>
-      </div>
-      <div class="card-arrow">›</div>
-    </a>
+    <div style="position:relative">
+      <a href="2026-02.html" class="report-card latest">
+        <div class="card-month">02月</div>
+        <div class="card-meta">
+          <div class="card-title">2026年2月財務月報</div>
+          <div class="card-period">2026-02-01 ～ 2026-02-28 ・ 發布：2026/03/19</div>
+          <a href="raw/2026-02.pdf" class="pdf-link" onclick="event.stopPropagation()" target="_blank">↓ 原始財報 PDF</a>
+        </div>
+        <div class="card-badges">
+          <span class="badge badge-new">最新</span>
+          <span class="badge badge-gold">含遞延付款說明</span>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+    </div>
+
+    <div style="position:relative">
+      <a href="2026-01.html" class="report-card">
+        <div class="card-month">01月</div>
+        <div class="card-meta">
+          <div class="card-title">2026年1月財務月報</div>
+          <div class="card-period">2026-01-01 ～ 2026-01-31</div>
+          <a href="raw/2026-01.pdf" class="pdf-link" onclick="event.stopPropagation()" target="_blank">↓ 原始財報 PDF</a>
+        </div>
+        <div class="card-badges">
+          <span class="badge badge-gold">首期報告</span>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+    </div>
+
   </div>
-  <div class="footer">閱大安管理委員會 · 財務資料僅供本社區住戶參考<br>如發現資料有誤請聯繫管委會財務委員</div>
+
+  <div class="footer">
+    閱大安管理委員會 · 財務資料僅供本社區住戶參考<br>
+    如發現資料有誤請聯繫管委會財務委員
+  </div>
+
 </div>
+
 </body>
 </html>

@@ -7,12 +7,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
-  :root{
-    --ink:#1a1814;--ink2:#3d3a34;--ink3:#7a7670;
-    --paper:#f8f5f0;--paper2:#ede9e2;--paper3:#e0dbd2;
-    --gold:#b8860b;--gold2:#d4a017;
-    --red:#c0392b;--green:#1a6b3c;--blue:#1a4a6b;
-    --border:rgba(26,24,20,0.12);--radius:4px;
+  
+  :root {
+    --wg1:  #EAE7E1;
+    --wg9:  #898480;
+    --wg11: #696460;
+    --wg41: #3C3835;
+    --white: #F7F5F2;
+    --line:  rgba(60,56,53,0.12);
+    --ink:#3C3835;--ink2:#696460;--ink3:#898480;
+    --paper:#EAE7E1;--paper2:#F0EDE8;--paper3:#E8E4DD;
+    --gold:#898480;--gold2:#696460;
+    --red:#8C1F1F;--green:#1F5C38;--blue:#2B4A6B;
+    --border:rgba(60,56,53,0.12);--radius:2px;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6;}
@@ -22,27 +29,31 @@
     .panel,.kpi-card{break-inside:avoid;}
     canvas{max-height:200px!important;}
   }
-  .header{background:var(--ink);color:var(--paper);padding:28px 48px 22px;border-bottom:3px solid var(--gold);position:relative;overflow:hidden;}
-  .header::before{content:'';position:absolute;top:0;right:0;bottom:0;width:220px;background:repeating-linear-gradient(45deg,transparent,transparent 6px,rgba(184,134,11,0.06) 6px,rgba(184,134,11,0.06) 7px);}
+  .header{background:var(--ink);color:var(--paper);padding:28px 48px 22px;border-bottom:2px solid var(--wg11);position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;inset:0;
+    background:
+      repeating-linear-gradient(92deg,transparent,transparent 120px,rgba(234,231,225,0.03) 120px,rgba(234,231,225,0.03) 121px),
+      repeating-linear-gradient(178deg,transparent,transparent 60px,rgba(234,231,225,0.02) 60px,rgba(234,231,225,0.02) 61px);
+    pointer-events:none;}
   .header-row{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;}
   .header h1{font-size:24px;font-weight:700;letter-spacing:0.06em;}
   .header .period{font-size:12px;color:rgba(248,245,240,0.5);letter-spacing:0.12em;margin-top:3px;}
   .header-right{text-align:right;font-size:11px;color:rgba(248,245,240,0.5);}
-  .header-right strong{color:var(--gold2);font-size:13px;display:block;}
+  .header-right strong{color:var(--wg1);font-size:13px;display:block;}
   .tabs{display:flex;background:var(--ink2);padding:0 40px;overflow-x:auto;}
   .tab{padding:11px 18px;font-size:13px;color:rgba(248,245,240,0.5);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
   .tab:hover{color:rgba(248,245,240,0.8);}
-  .tab.active{color:var(--gold2);border-bottom-color:var(--gold2);}
+  .tab.active{color:var(--wg1);border-bottom-color:var(--wg1);}
   .main{max-width:1060px;margin:0 auto;padding:28px 20px 60px;}
   .tab-content{display:none;}.tab-content.active{display:block;}
-  .sl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+  .sl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--wg11);margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
   .sl::after{content:'';flex:1;height:1px;background:var(--border);}
   .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
   @media(max-width:700px){.kpi-row{grid-template-columns:1fr 1fr;}}
   .kpi-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px 12px;position:relative;overflow:hidden;}
   .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
   .kpi-card.g::before{background:var(--green);}.kpi-card.r::before{background:var(--red);}
-  .kpi-card.gd::before{background:var(--gold);}.kpi-card.b::before{background:var(--blue);}
+  .kpi-card.gd::before{background:var(--wg9);}.kpi-card.b::before{background:var(--blue);}
   .kpi-title{font-size:10px;color:var(--ink3);letter-spacing:.05em;margin-bottom:8px;}
   .kpi-val{font-size:22px;font-weight:700;color:var(--ink);}
   .kpi-val.pos{color:var(--green);}.kpi-val.neg{color:var(--red);}
@@ -55,7 +66,7 @@
   .panel{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
   .panel.mb{margin-bottom:18px;}
   .ph{padding:11px 16px;background:var(--paper2);border-bottom:1px solid var(--border);font-size:12px;font-weight:600;color:var(--ink2);display:flex;align-items:center;justify-content:space-between;}
-  .tag{font-size:9px;background:var(--gold);color:white;padding:2px 7px;border-radius:10px;}
+  .tag{font-size:9px;background:var(--wg11);color:var(--wg1);padding:2px 7px;border-radius:10px;}
   .tag.b{background:var(--blue);}.tag.g{background:var(--green);}
   .pb{padding:14px 16px;}
   table{width:100%;border-collapse:collapse;font-size:12px;}
@@ -68,17 +79,28 @@
   .dp{color:var(--green);}.dn2{color:var(--red);}.dz{color:var(--ink3);}
   .sumbox{background:var(--ink);color:var(--paper);border-radius:var(--radius);padding:22px 26px;margin-bottom:22px;position:relative;overflow:hidden;}
   .sumbox::before{content:'財務摘要';position:absolute;top:12px;right:16px;font-size:44px;color:rgba(255,255,255,.04);font-weight:700;pointer-events:none;}
-  .sumbox h3{font-size:13px;color:var(--gold2);margin-bottom:12px;letter-spacing:.06em;}
+  .sumbox h3{font-size:13px;color:var(--wg1);margin-bottom:12px;letter-spacing:.06em;}
   .si{display:flex;gap:9px;margin-bottom:9px;font-size:12.5px;line-height:1.7;color:rgba(248,245,240,.85);}
-  .si .bul{color:var(--gold2);font-size:15px;flex-shrink:0;}
+  .si .bul{color:var(--wg1);font-size:15px;flex-shrink:0;}
   .alert{background:rgba(192,57,43,.15);border-left:2px solid var(--red);color:rgba(248,245,240,.9);padding:9px 13px;border-radius:2px;font-size:12px;margin-top:12px;}
-  .ok{background:rgba(26,107,60,.15);border-left:2px solid var(--green);color:rgba(248,245,240,.9);padding:9px 13px;border-radius:2px;font-size:12px;margin-top:8px;}
+  .ok{background:rgba(31,92,56,.12);border-left:2px solid var(--green);color:rgba(248,245,240,.9);padding:9px 13px;border-radius:2px;font-size:12px;margin-top:8px;}
   .ch{position:relative;height:210px;}
   .ch-sm{position:relative;height:170px;}
+
+  .btn-pdf {
+    display:inline-flex;align-items:center;gap:6px;
+    padding:9px 18px;font-size:12px;
+    font-family:'Noto Sans TC',sans-serif;
+    border-radius:var(--radius);cursor:pointer;transition:all .2s;
+    border:1px solid var(--wg11);
+    background:transparent;color:var(--wg11);
+    text-decoration:none;letter-spacing:0.04em;
+  }
+  .btn-pdf:hover{background:var(--wg11);color:var(--wg1);}
   .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;font-size:12px;font-family:'Noto Sans TC',sans-serif;border-radius:var(--radius);cursor:pointer;transition:all .2s;border:1px solid var(--border);background:transparent;color:var(--ink2);}
   .btn:hover{background:var(--paper2);}
   /* first-period notice */
-  .first-notice{background:rgba(26,74,107,0.07);border:1px solid rgba(26,74,107,0.2);border-radius:var(--radius);padding:11px 15px;font-size:12px;color:var(--ink2);margin-bottom:20px;line-height:1.8;}
+  .first-notice{background:rgba(60,56,53,0.05);border:1px solid rgba(60,56,53,0.15);border-radius:var(--radius);padding:11px 15px;font-size:12px;color:var(--ink2);margin-bottom:20px;line-height:1.8;}
 </style>
 </head>
 <body>
@@ -106,6 +128,7 @@
 </div>
 
 <div class="main">
+<a href="https://culturalcity.github.io/finance/" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;letter-spacing:0.1em;color:var(--wg11);text-decoration:none;margin-bottom:20px;transition:color .18s" onmouseover="this.style.color='#3C3835'" onmouseout="this.style.color='#696460'">← 財務月報總覽</a>
 
 <!-- ══ 總覽 ══ -->
 <div id="tab-overview" class="tab-content active">
